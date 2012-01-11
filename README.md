@@ -22,12 +22,12 @@ Function `sublimeResize();` will responsively resize your Sublime video as your 
 function sublimeResize(){
   var sublimeWidth=$("#wrapper").width();
   var sublimeAspect=1.7777778;
-  sublimevideo.resize("sublime",sublimeWidth,sublimeAspect);
+  sublimevideo.resize("sublime",sublimeWidth,sublimeWidth/sublimeAspect);
 }
 </pre>
 For widescreen videos, the value of variable `sublimeAspect` should be **1.7777778** (16/9)
 For standard videos, the value of variable `sublimeAspect` should be **1.3333333** (4/3)
-You can calculate your own aspect ratio by width/height.
+You can calculate your own aspect ratio by width/height of your video.
 
 If everything is properly set, your video should beautifully resize responsively.
 
