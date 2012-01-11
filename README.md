@@ -18,8 +18,6 @@ Function `sublimeResize();` will responsively resize your Sublime video as your 
 </pre>
 `YOURTOKEN` should be replaced with the token provided for your site from your [SublimeVideo](http://sublimevideo.net) account.
 
-
-
 <pre>
 function sublimeResize(){
   var sublimeWidth=$("#wrapper").width();
@@ -31,8 +29,6 @@ For widescreen videos, the value of variable `sublimeAspect` should be **1.77777
 For standard videos, the value of variable `sublimeAspect` should be **1.3333333** (4/3)
 You can calculate your own aspect ratio by width/height.
 
-
-
 If everything is properly set, your video should beautifully resize responsively.
 
 ## Contribute
@@ -42,5 +38,7 @@ Feel free to contribute. https://github.com/jonsuh/SublimeVideo-jQuery-Responsiv
 ## License
 
 Licensed under the [MIT](http://opensource.org/licenses/mit-license.php). http://opensource.org/licenses/mit-license.php
-Copyright (c) 2012 [Jonathan Suh](http://jonsuh.com) | [@jonsuh](https://twitter.com/jonsuh)
+
+Copyright (c) 2012 [Jonathan Suh](mailto:hello@jonsuh.com) | [@jonsuh](https://twitter.com/jonsuh)
+
 http://jonsuh.com
