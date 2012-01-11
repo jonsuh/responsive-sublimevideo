@@ -1,0 +1,52 @@
+<!--https://github.com/jonsuh/SublimeVideo-jQuery-Responsive-Resize-->
+<!DOCTYPE HTML>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en"> <!--<![endif]-->
+<html>
+<head>
+<meta charset="UTF-8">
+<title>SublimeVideo jQuery Responsive Resize</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="http://cdn.sublimevideo.net/js/YOURTOKEN.js"></script>
+<!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<script>
+$(document).ready(function(){
+  $(window).resize(function(){
+    sublimeResize();
+  });
+});
+
+sublimevideo.ready(function(){
+  sublimeResize();
+});
+
+function sublimeResize(){
+  var sublimeWidth=$("#wrapper").width();
+  /*
+	  Set sublimeAspect according to the aspect ratio of your video.
+    Widescreen (16:9) = 1.7777778
+    Standard (4:3) = 1.3333333
+    Determine your own aspect ratio by width/height.
+  */
+	var sublimeAspect=1.7777778;
+  sublimevideo.resize("sublime",sublimeWidth,sublimeAspect);
+}
+</script>
+<style type="text/css">
+#sublime {display:none} /* Set to prevent flickering on page load */
+</style>
+</head>
+<body>
+<div id="wrapper">
+  <video id="sublime" class="sublime" width="544" height="306" poster="preview.jpg" preload="none">
+    <!-- Video sources referenced from sublimevideo.net for the purpose of demoing. -->
+    <source src="http://media.jilion.com/videos/demo/midnight_sun_sv1_360p.mp4" />
+    <source src="http://media.jilion.com/videos/demo/midnight_sun_sv1_720p.mp4" data-quality="hd" />
+    <source src="http://media.jilion.com/videos/demo/midnight_sun_sv1_360p.webm" />
+    <source src="http://media.jilion.com/videos/demo/midnight_sun_sv1_720p.webm" data-quality="hd" />
+  </video>
+</div>
+</body>
+</html>
