@@ -23,15 +23,15 @@ sublimevideo.ready(function(){
 });
 
 function sublimeResize(){
-  var sublimeWidth=$("#wrapper").width();
+  var sublimeWidth = $("#wrapper").width();
   /*
     Set sublimeAspect according to the aspect ratio of your video.
     Widescreen (16:9) = 1.7777778
     Standard (4:3) = 1.3333333
     Determine your own aspect ratio by width/height.
   */
-  var sublimeAspect=1.7777778;
-  sublimevideo.resize("sublime",sublimeWidth,sublimeAspect);
+  var sublimeAspect = 1.7777778;
+  sublimevideo.resize("sublime", sublimeWidth, sublimeWidth/sublimeAspect);
 }
 </script>
 <style type="text/css">
