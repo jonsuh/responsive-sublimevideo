@@ -1,0 +1,169 @@
+<!--https://github.com/jonsuh/SublimeVideo-jQuery-Responsive-Resize-->
+<!DOCTYPE HTML>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en"> <!--<![endif]-->
+<html>
+<head>
+<meta charset="UTF-8">
+<title>SublimeVideo Playlist jQuery Responsive Resize</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="http://cdn.sublimevideo.net/js/YOURTOKEN.js"></script>
+<!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<script>
+/*
+  Set sublimeAspect according to the aspect ratio of your video.
+  Widescreen (16:9) = 1.7777778
+  Standard (4:3) = 1.3333333
+  Determine your own aspect ratio by width/height.
+*/
+var sublimeAspect=1.7777778;
+/*
+  Set sublimeWidthObj as the jQuery selector of the object you'd like the video to have the width of.
+  Example: If the ID of the object is 'wrapper', sublimeWidthObj="#wrapper"
+*/
+var sublimeWidthObj="#playlist1";
+
+var SublimeVideo=SublimeVideo || {};
+
+$(document).ready(function(){
+  $('.sublime-playlist').each(function() { SublimeVideo[$(this).attr('id')] = new InteractiveThumbnailsHandler($(this).attr('id')); });
+  $(window).resize(function(){
+    sublimeResize();
+  });
+});
+
+var InteractiveThumbnailsHandler = function(interactiveWrapperId){
+  this.interactiveWrapperId = interactiveWrapperId;
+  this.videosCount = $("#" + this.interactiveWrapperId + " .video_wrap").size();
+  var matches = $("#" + this.interactiveWrapperId + " video").attr("id").match(/^video(\d+)$/);
+  this.firstVideoIndex = parseInt(matches[1], 10);
+  this.setupObservers();
+  this.loadDemo();
+};
+
+$.extend(InteractiveThumbnailsHandler.prototype, {
+  setupObservers: function() {
+    var that = this;
+    $("#"+ this.interactiveWrapperId + " li").each(function() {
+      $(this).click(function(event) {
+        event.preventDefault();
+        if (!$(this).hasClass("active")) {
+          that.clickOnThumbnail($(this).attr("id"));
+        }
+      });
+    });
+  },
+  loadDemo: function() {
+    if (this.activeVideoId) this.reset();
+    this.activeVideoId = "video" + this.firstVideoIndex;
+    this.showActiveVideo();
+  },
+  reset: function() {
+    $("#" + this.interactiveWrapperId + " .video_wrap.active").removeClass("active");
+    sublimevideo.unprepare(this.activeVideoId);
+    this.deselectThumbnail(this.activeVideoId);
+  },
+  clickOnThumbnail: function(thumbnailId) {
+    this.reset();
+    this.activeVideoId = thumbnailId.replace(/^thumbnail_/, "");
+    sublimevideo.prepare(this.activeVideoId);
+    this.showActiveVideo();
+    sublimevideo.resize(this.activeVideoId,$(sublimeWidthObj).width(),$(sublimeWidthObj).width()/sublimeAspect);
+    sublimevideo.play(this.activeVideoId);
+  },
+  selectThumbnail: function(videoId) {
+    $("#thumbnail_" + videoId).addClass("active");
+  },
+  deselectThumbnail: function(videoId) {
+    $("#thumbnail_" + videoId).removeClass("active");
+  },
+  showActiveVideo: function() {
+    this.selectThumbnail(this.activeVideoId);
+    $("#" + this.activeVideoId).parent().addClass("active");
+  },
+  handleAutoNext: function(endedVideoId) {
+    var nextId = parseInt(endedVideoId.replace(/^video/, ""), 10) + 1;
+    if (nextId > 1 && nextId < this.firstVideoIndex + this.videosCount) {
+      this.clickOnThumbnail("thumbnail_video" + nextId);
+    }
+  }
+});
+
+sublimevideo.ready(function(){
+  sublimevideo.resize($(".sublime-playlist > div.active .sublimed").attr("id"),$(sublimeWidthObj).width(),$(sublimeWidthObj).width()/sublimeAspect);
+  //Have to run a resize a second time because of a sizing glitch on page load.
+  sublimevideo.resize($(".sublime-playlist > div.active .sublimed").attr("id"),$(sublimeWidthObj).width(),$(sublimeWidthObj).width()/sublimeAspect);
+  sublimevideo.onEnd(function(sv) {
+    var matches = sv.element.id.match(/^video(\d+)$/);
+    if (matches != undefined) {
+      var playlistId = $(sv.element).parents('.sublime-playlist').attr("id");
+      if (parseInt(matches[1], 10) <= SublimeVideo[playlistId].firstVideoIndex + SublimeVideo[playlistId].videosCount) {
+        SublimeVideo[playlistId].handleAutoNext(sv.element.id);
+      }
+    }
+  });
+});
+
+function sublimeResize(){
+  var sublimeActive=$(".sublime-playlist > div.active .sublimed").attr("id");
+  sublimevideo.resize(sublimeActive,$(sublimeWidthObj).width(),$(sublimeWidthObj).width()/sublimeAspect);
+}
+</script>
+<style type="text/css">
+.sublime-playlist .sublime,
+  .sublime-playlist .video_wrap {display: none}
+.sublime-playlist .video_wrap.active {display: inline-block}
+.sublime-playlist ul,
+  .sublime-playlist li {margin: 0; padding: 0; list-style: none}
+.sublime-playlist ul {background: #f4f4f4; margin-top: 5px}
+.sublime-playlist ul li:hover {background: #fff}
+.sublime-playlist li.active,
+  .sublime-playlist li.active:hover {background: #555}
+.sublime-playlist li > a {color: #222; text-decoration: none; padding: 10px 15px; display: block}
+.sublime-playlist li.active > a {color: #fefefe}
+  
+body {font-family: Helvetica, Arial, sans-serif}
+h1 {letter-spacing: -1px}
+</style>
+</head>
+<body>
+<h1>SublimeVideo Playlist jQuery Responsive Resize</h1>
+<div id="wrapper">
+  <div id="playlist1" class="sublime-playlist">
+    <!-- Video sources referenced from http://test.sublimevideo.net/playlists for the purpose of demoing. -->
+    <div class="video_wrap">
+      <video id="video1" class="sublime" poster="video1_preview.jpg" preload="none">
+        <source src="http://medias.jilion.com/sublimevideo/dartmoor1_800.mp4" />
+        <source src="http://medias.jilion.com/sublimevideo/dartmoor1_800.ogv" />
+      </video>
+    </div>
+    <div class="video_wrap">
+      <video id="video2" poster="video2_preview.jpg" preload="none">
+        <source src="http://medias.jilion.com/sublimevideo/dartmoor2_800.mp4" />
+        <source src="http://medias.jilion.com/sublimevideo/dartmoor2_800.ogv" />
+      </video>
+    </div>
+    <div class="video_wrap">
+      <video id="video3" poster="video3_preview.jpg" preload="none">
+        <source src="http://medias.jilion.com/sublimevideo/dartmoor3_800.mp4" />
+        <source src="http://medias.jilion.com/sublimevideo/dartmoor3_800.ogv" />
+      </video>
+    </div>
+    <div class="video_wrap">
+      <video id="video4" poster="video4_preview.jpg" preload="none">
+        <source src="http://medias.jilion.com/sublimevideo/dartmoor4_800.mp4" />
+        <source src="http://medias.jilion.com/sublimevideo/dartmoor4_800.ogv" />
+      </video>
+    </div>
+    <ul>
+      <li id="thumbnail_video1"><a href="">Play video #1</a></li>
+      <li id="thumbnail_video2"><a href="">Play video #2</a></li>
+      <li id="thumbnail_video3"><a href="">Play video #3</a></li>
+      <li id="thumbnail_video4"><a href="">Play video #4</a></li>
+    </ul>
+  </div>
+</div>
+</body>
+</html>
