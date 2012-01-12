@@ -13,21 +13,27 @@ Function `sublimeResize();` will responsively resize your Sublime video as your 
 
 ## Usage
 
-<pre>
-&lt;script src=&quot;http://cdn.sublimevideo.net/js/YOURTOKEN.js&quot;&gt;&lt;/script&gt;
-</pre>
+	<script src="http://cdn.sublimevideo.net/js/YOURTOKEN.js"></script>
+
 `YOURTOKEN` should be replaced with the token provided for your site from your [SublimeVideo](http://sublimevideo.net) account.
 
-<pre>
-function sublimeResize(){
-  var sublimeWidth=$("#wrapper").width();
-  var sublimeAspect=1.7777778;
-  sublimevideo.resize("sublime",sublimeWidth,sublimeWidth/sublimeAspect);
-}
-</pre>
+	var sublimeAspect=1.7777778;
+
 For widescreen videos, the value of variable `sublimeAspect` should be **1.7777778** (16/9)
 For standard videos, the value of variable `sublimeAspect` should be **1.3333333** (4/3)
 You can calculate your own aspect ratio by width/height of your video.
+
+### For Playlist
+
+	var sublimeWidthObj="#playlist1";
+
+`sublimeWidthObj` should be set as a jQuery-like selector of the object you'd like the video to resize itself to have the width of.
+
+> Examples:
+
+> If the ID of the object is 'wrapper', `var sublimeWidthObj="#wrapper"`
+
+> If the class of the object is 'wrapper', `var sublimeWidthObj=".wrapper"`
 
 If everything is properly set, your video should beautifully resize responsively.
 
